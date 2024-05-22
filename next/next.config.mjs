@@ -3,7 +3,7 @@ const nextConfig = {
     rewrite: async () => {
         return [
             {
-                source: '/:path*',
+                source: '/api/:path*',
                 destination: 'http://sho800.xsrv.jp/sports_3J/:path*',
             },
         ];
