@@ -15,24 +15,16 @@ export default function Home() {
 
 
     useEffect(() => {
-        fetch("http://localhost:5000/")
+        fetch("/")
             .then(res => res.json())
             .then(data => {
                 setData(data)
+
                 // statusがwaitingかつ今日の試合かつ開始前のものをwaitingに
                 // statusがwaitingかprogressである、または進行中のものをprogressに
                 // それ以外をfinishedに
                 const now = new Date();
                 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                // const waiting = data.filter((d: any) => {
-                //     const start_date = new Date(d.start_time);
-                //     return start_date >= today && start_date > now;
-                // });
-                // const progress = data.filter((d: any) => {
-                //     const start_date = new Date(d.start_time);
-                //     const end_date = new Date(d.end_time);
-                //     return start_date < now && end_date > now;
-                // });
 
                 const waiting = data.filter((d: any) => {
                     const start_date = new Date(d.start_time);

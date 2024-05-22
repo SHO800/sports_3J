@@ -16,5 +16,5 @@ export interface Data {
     place: string;
     status: string;
     memo: string;
-
+    required: number[];
 }
