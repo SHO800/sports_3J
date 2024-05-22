@@ -1,0 +1,33 @@
+* {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-feature-settings: "palt";
+    letter-spacing: 0.1rem;
+}
+
+h1 {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+h2 {
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+.row-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+}
+
+p {
+    color: #86b2c0;
+    font-size: 1rem;
+}
+
+input[disabled] {
+    display: none;
+}

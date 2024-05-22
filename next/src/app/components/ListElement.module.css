@@ -1,0 +1,15 @@
+.rowWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.rowWrapper > div {
+    display: flex;
+    margin: 0;
+    justify-content: space-between;
+    align-items: center;
+}
+.rowWrapper * {
+    margin: 0;
+}
