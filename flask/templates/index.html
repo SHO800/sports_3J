@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>3J-体育大会</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One&family=Noto+Sans+JP:wght@100..900&family=Shippori+Mincho&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<h1 id="clock"></h1>
+
+<div class="schedule wrapper-block">
+    <h2>今日の試合</h2>
+    {% if waiting  %}
+        {% for data in waiting %}
+            <div class="row-wrapper">
+                <p><span style="margin-right: 2rem">{{ data.start_time }}~</span>{{ data.sports }} (vs {{ data.opponent }})</p>
+                <p class="remain-time"></p>
+            </div>
+            <input disabled type="text" hidden value="{{ data.start_time }}" class="start-time">
+            <input disabled type="text" hidden value="{{ data.date }}" class="date">
+        {% endfor %}
+    {% else %}
+        <p>今日の試合はありません</p>
+    {% endif %}
+</div>
+<div class="progress wrapper-block">
+    <h2>進行中の試合</h2>
+    {% if progress %}
+        {% for data in progress %}
+            <div class="row-wrapper">
+                <p><span style="margin-right: 2rem">{{ data.start_time }} ~ {{ data.end_time }}</span>{{ data.sports }} (vs {{ data.opponent }})</p>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>進行中の試合はありません</p>
+    {% endif %}
+</div>
+
+<div class="result wrapper-block">
+    <h2>戦績</h2>
+    {% for data in result %}
+        <div class="row-wrapper">
+            <p><span style="margin-right: 2rem">{{ data.start_time }}~</span>{{ data.sports }} (vs {{ data.opponent }})</p>
+            <p>{{ data.status }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+
+<script>
+    const time_objects = document.getElementsByClassName("start-time");
+    const remain_time_objects = document.getElementsByClassName("remain-time");
+
+    function clock() {
+        const now = new Date();
+        const hour = now.getHours();
+        const min = now.getMinutes();
+        const sec = now.getSeconds();
+
+        const time = hour.toString().padStart(2, '0') + ":" + min.toString().padStart(2, '0') + ":" + sec.toString().padStart(2, '0');
+        document.getElementById("clock").innerHTML = time;
+    }
+
+    function remain_time() {
+        for (let i = 0; i < time_objects.length; i++) {
+            const time = time_objects[i].value;
+            const time_array = time.split(":");
+            const hour = parseInt(time_array[0]);
+            const min = parseInt(time_array[1]);
+
+            const now = new Date();
+            const now_hour = now.getHours();
+            const now_min = now.getMinutes();
+
+            let remaining_hour = hour - now_hour;
+            if (remaining_hour < 0) {
+                remaining_hour += 24;
+            }
+            let remaining_min = min - now_min;
+            if (remaining_min < 0) {
+                remaining_hour -= 1;
+                remaining_min += 60;
+            }
+
+            console.log(remaining_hour, remaining_min);
+            let html = remaining_min + "<span style='font-size: 1.5rem'>分</span><span style='font-size: 1.75rem'>後</span>"
+            // もし1時間以上後なら時間表示を追加
+            if (remaining_hour > 0) {
+                html = remaining_hour + "<span style='font-size: 1.5rem'>時間</span>" + html;
+            }
+
+            remain_time_objects[i].innerHTML = html;
+            // もし15分以内に始まる試合なら
+            if (remaining_hour === 0 && remaining_min <= 15) {
+                remain_time_objects[i].style.color = "red";
+            }
+
+
+        }
+    }
+
+    setInterval('clock();remain_time()', 1000);
+</script>
