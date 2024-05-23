@@ -16,6 +16,7 @@ export const RemainStartTime = ({start_time, incoming}: { start_time: string, in
             const diff = startTime.getTime() - now.getTime();
             diffHour = Math.floor(diff / (1000 * 60 * 60));
             diffMinute = Math.floor(diff / (1000 * 60)) % 60 + 1;
+
             setRemainTime({hour: diffHour, minute: diffMinute});
         }, 1000)
         return () => clearInterval(timer);

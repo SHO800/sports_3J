@@ -24,7 +24,8 @@ export const ResultButton = ({data, reload}: {data: Data, reload?: () => void}) 
                         }
                         fetch(action, options).then((e) => {
                             if(e.status === 200) {
-                                if (reload) reload()
+                                alert("保存しました。")
+                                window.location.reload()
                                 return
                             }
                             alert("保存できませんでした。")

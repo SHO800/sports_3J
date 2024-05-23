@@ -33,11 +33,11 @@ export default function Home() {
                 const progress = data.filter((d: any) => {
                     const start_date = new Date(d.start_time);
                     const end_date = new Date(d.end_time);
-                    return (d.status === "waiting" && start_date < now) || (d.status === "progress" && end_date > now);
+                    return !(d.status === "win" || d.status === "lose" || d.status === "draw") && (start_date < now);
                 });
                 const finished = data.filter((d: any) => {
                     const end_date = new Date(d.end_time);
-                    return (d.status === "win" || d.status === "lose" || d.status === "draw") || end_date < now;
+                    return (d.status === "win" || d.status === "lose" || d.status === "draw") ;
                 });
 
                 // waitingは開始時間が早い順
