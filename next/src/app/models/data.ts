@@ -10,6 +10,7 @@ export interface Data {
     id: number;
     sports: string;
     opponent: string;
+    delay: number;
     date: string;
     start_time: string;
     end_time: string;
