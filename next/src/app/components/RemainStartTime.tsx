@@ -21,8 +21,16 @@ export const RemainStartTime = ({start_time, incoming}: { start_time: string, in
         return () => clearInterval(timer);
     }, [])
 
+    // もしhourが0の場合はminuteのみ表示
+    if (hour === 0) {
+        return (
+            <p style={incoming ? {color: "red"} : {}}>{minute.toString().padStart(2, "0")}<span style={{fontSize: "0.8em"}}>分</span><span
+                style={{fontSize: "0.9em"}}>後</span></p>
+        )
+    }
+
     return (
-        <p style={incoming ? {color: "red"} : {}}>{hour}<span style={{fontSize: "0.8em"}}>時間</span>{minute}<span style={{fontSize: "0.8em"}}>分</span><span
+        <p style={incoming ? {color: "red"} : {}}>{hour}<span style={{fontSize: "0.8em"}}>時間</span>{minute.toString().padStart(2, "0")}<span style={{fontSize: "0.8em"}}>分</span><span
             style={{fontSize: "0.9em"}}>後</span></p>
     )
 }

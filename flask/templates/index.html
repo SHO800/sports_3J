@@ -89,10 +89,10 @@
             }
 
             console.log(remaining_hour, remaining_min);
-            let html = remaining_min + "<span style='font-size: 1.5rem'>分</span><span style='font-size: 1.75rem'>後</span>"
+            let html = remaining_min.toString().padStart(2, "0") + "<span style='font-size: 1.5rem'>分</span><span style='font-size: 1.75rem'>後</span>"
             // もし1時間以上後なら時間表示を追加
             if (remaining_hour > 0) {
-                html = remaining_hour + "<span style='font-size: 1.5rem'>時間</span>" + html;
+                html = remaining_hour.toString().padStart(2, "0") + "<span style='font-size: 1.5rem'>時間</span>" + html;
             }
 
             remain_time_objects[i].innerHTML = html;

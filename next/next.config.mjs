@@ -4,7 +4,8 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*',
-                destination: 'http://sho800.xsrv.jp/sports_3J/:path*',
+                // destination: 'http://sho800.xsrv.jp/sports_3J/:path*',
+                destination: 'http://localhost:5000/:path*',
             },
         ];
     }

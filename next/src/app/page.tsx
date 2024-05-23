@@ -5,6 +5,7 @@ import {ListWrapper} from "@/app/components/ListWrapper";
 import {useEffect, useState} from "react";
 import {Data} from "@/app/models/data";
 import {ListElement} from "@/app/components/ListElement";
+import {TimeTable} from "@/app/components/TimeTable";
 
 
 export default function Home() {
@@ -13,8 +14,7 @@ export default function Home() {
     const [progress, setProgress] = useState<Data[]>([]);
     const [finished, setFinished] = useState<Data[]>([]);
 
-
-    useEffect(() => {
+    const reload = () => {
         fetch("/api/")
             .then(res => res.json())
             .then(data => {
@@ -28,7 +28,7 @@ export default function Home() {
 
                 const waiting = data.filter((d: any) => {
                     const start_date = new Date(d.start_time);
-                    return d.status === "waiting" && start_date >= today  && start_date > now;
+                    return d.status === "waiting" && start_date >= today && start_date > now;
                 });
                 const progress = data.filter((d: any) => {
                     const start_date = new Date(d.start_time);
@@ -37,14 +37,33 @@ export default function Home() {
                 });
                 const finished = data.filter((d: any) => {
                     const end_date = new Date(d.end_time);
-                    return d.status === "finished" || end_date < now;
+                    return (d.status === "win" || d.status === "lose" || d.status === "draw") || end_date < now;
                 });
+
+                // waitingは開始時間が早い順
+                waiting.sort((a: any, b: any) => {
+                    return new Date(a.start_time).getTime() - new Date(b.start_time).getTime();
+                })
+
+                // progressは開始時間が早い順
+                progress.sort((a: any, b: any) => {
+                    return new Date(a.start_time).getTime() - new Date(b.start_time).getTime();
+                })
+
+                // finishedは終了時間が早い順
+                finished.sort((a: any, b: any) => {
+                    return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
+                })
 
 
                 setWaiting(waiting);
                 setProgress(progress);
                 setFinished(finished);
             })
+    }
+
+    useEffect(() => {
+        reload()
     }, [])
 
     return (
@@ -59,7 +78,7 @@ export default function Home() {
 
             <ListWrapper title="進行中の試合">
                 {progress.map((data, index) =>
-                    <ListElement data={data} key={index}></ListElement>
+                    <ListElement data={data} key={index} progress reload={reload}></ListElement>
                 )}
             </ListWrapper>
 
@@ -68,6 +87,11 @@ export default function Home() {
                     <ListElement data={data} key={index} finished></ListElement>
                 )}
             </ListWrapper>
+
+
+            <div>
+                <TimeTable/>
+            </div>
         </main>
     );
 }

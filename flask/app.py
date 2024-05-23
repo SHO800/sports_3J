@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
-from flask import Flask, render_template, request, redirect
+
+from flask import Flask, render_template, request, redirect, jsonify
+from flask_cors import CORS
 
 
 def load_data():
@@ -14,43 +16,31 @@ def convert_time(time_string: str):
 
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/')
-def top():
+@app.route('/api/', methods=['GET'])
+def all_data():
     data = load_data()
 
-    # dataのうちstatusがwaitingなもののみ抽出
-    waiting = []
-    progress = []
-    for d in data:
-        if d["status"] == "waiting":
-            # もし今日の試合でなければ表示しない
-            if datetime.now().date() != datetime.strptime(d["date"], "%Y-%m-%d").date():
-                continue
+    return data
 
-            # convert_time(d["start_time"])の戻り値を年月日も含むdatetime型に変換
-            start_time = datetime.now().replace(
-                hour=convert_time(d["start_time"]).hour, minute=convert_time(d["start_time"]).minute)
-            end_time = datetime.now().replace(
-                hour=convert_time(d["end_time"]).hour, minute=convert_time(d["end_time"]).minute)
 
-            # もし現在進行中の試合ならprogressにしておく
-            if start_time <= datetime.now() <= end_time:
-                d["status"] = "progress"
-                progress.append(d)
-                continue
+@app.route('/api/result-register/', methods=['POST'])
+def result_resister():
+    loaded_data = load_data()
 
-            d["remaining_time"] = start_time - datetime.now()
-            waiting.append(d)
+    request.form.get('id')
+    status = request.form.get('status')
+    for d in loaded_data:
+        if d["id"] == request.form.get('id'):
+            print("change status")
+            d["status"] = status
 
-    # dataのうちstatusがwinかloseなもののみ抽出
-    result = []
-    for d in data:
-        if d["status"] == "win" or d["status"] == "lose":
-            result.append(d)
+    with open("data.json", "w") as f:
+        json.dump(loaded_data, f, indent=4)
 
-    return render_template("index.html", waiting=waiting, progress=progress, result=result)
+    return jsonify({"status": "ok"})
 
 
 @app.route('/admin')

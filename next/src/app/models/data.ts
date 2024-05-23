@@ -14,7 +14,7 @@ export interface Data {
     start_time: string;
     end_time: string;
     place: string;
-    status: string;
+    status: "waiting" | "progress" | "win" | "lose" | "draw" | "pending" | "cancel" | "other"
     memo: string;
     required: number[];
 }
