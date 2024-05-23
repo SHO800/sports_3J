@@ -63,7 +63,11 @@ export default function Home() {
     }
 
     useEffect(() => {
-        reload()
+        // 10秒おきにreloadするようにする
+        reload();
+        const interval = setInterval(reload, 10000);
+        return () => clearInterval(interval);
+
     }, [])
 
     return (
