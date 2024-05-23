@@ -8,7 +8,7 @@ export const ResultButton = ({data, reload}: {data: Data, reload?: () => void}) 
 
     if (isShow) return (
         <div style={{height: isShow? "3rem": "2rem"}}>
-            <form action={`/result-register/`} ref={formRef} method="post">
+            <form action={`/api/result-register/`} ref={formRef} method="post">
                 <input hidden name="id" value={data.id} />
                 <input type="radio" name="status" value="win" />win
                 <input type="radio" name="status" value="lose" />lose
@@ -29,6 +29,7 @@ export const ResultButton = ({data, reload}: {data: Data, reload?: () => void}) 
                                 return
                             }
                             alert("保存できませんでした。")
+                            console.log(e)
                         })
                     }
                 }>送信</button>

@@ -1,3 +1,5 @@
+"use client"
+
 import {useEffect, useState} from "react";
 
 export const RemainStartTime = ({start_time, incoming}: { start_time: string, incoming: boolean }) => {

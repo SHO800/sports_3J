@@ -31,6 +31,7 @@ def result_resister():
     loaded_data = load_data()
 
     request.form.get('id')
+
     status = request.form.get('status')
     for d in loaded_data:
         if d["id"] == request.form.get('id'):
