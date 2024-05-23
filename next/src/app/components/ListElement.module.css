@@ -1,7 +1,9 @@
 .rowWrapper {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .rowWrapper > div {

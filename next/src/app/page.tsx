@@ -91,11 +91,6 @@ export default function Home() {
                     <ListElement data={data} key={index} finished></ListElement>
                 )}
             </ListWrapper>
-
-
-            <div>
-                <TimeTable/>
-            </div>
         </main>
     );
 }

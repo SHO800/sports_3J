@@ -8,7 +8,7 @@ export const ResultButton = ({data, reload}: {data: Data, reload?: () => void}) 
 
     if (isShow) return (
         <div style={{height: isShow? "3rem": "2rem"}}>
-            <form action={`/api/result-register/`} ref={formRef} method="post">
+            <form action={`/result-register/`} ref={formRef} method="post">
                 <input hidden name="id" value={data.id} />
                 <input type="radio" name="status" value="win" />win
                 <input type="radio" name="status" value="lose" />lose
