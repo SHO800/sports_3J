@@ -24,7 +24,7 @@ export const ResultButton = ({data, reload}: {data: Data, reload?: () => void}) 
                         }
                         fetch(action, options).then((e) => {
                             if(e.status === 200) {
-                                alert("保存しました。")
+                                alert("保存しました。反映まで10秒ほどかかります。")
                                 window.location.reload()
                                 return
                             }

@@ -30,10 +30,10 @@ export const ListElement = ({data, waiting, progress, finished, reload}: {
     return (
         <div className={styles.rowWrapper}>
             <div>
-                <p>{data.sports} (vs {data.opponent})</p>
+                <p>{data.sports}</p>
             </div>
             <div>
-                <p>{start_str}~{end_str} <span style={{marginLeft: "2rem", fontSize: ".5em"}}>{data.id}</span></p>
+                <p style={{fontSize: ".85em"}}>{start_str}~{end_str}</p>
                 {waiting && <RemainStartTime start_time={data.start_time} incoming={is15min}/>}
                 {progress && <div style={{width: 0, position: "relative",}}>
                     <div style={{position: "absolute", top: "1rem", left: "-68vw", width: "80vw", height: "3rem"}}>
@@ -41,6 +41,13 @@ export const ListElement = ({data, waiting, progress, finished, reload}: {
                     </div>
                 </div>}
                 {finished && <p>{data.status}</p>}
+            </div>
+            <div>
+                <p style={{fontSize: ".7em"}}>第{parseInt(data.id.toString().slice(-2))}試合 (vs {data.opponent})</p>
+            </div>
+            <div>
+                <p style={{fontSize: ".7em"}}>{data.place}</p>
+                <p style={{marginLeft: "2rem", fontSize: ".5em"}}>{data.id}</p>
             </div>
         </div>
     )

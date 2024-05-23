@@ -6,13 +6,14 @@ import {useEffect, useState} from "react";
 import {Data} from "@/app/models/data";
 import {ListElement} from "@/app/components/ListElement";
 import {TimeTable} from "@/app/components/TimeTable";
+import {ListContainer} from "@/app/components/ListContainer";
 
 
 export default function Home() {
     const [data, setData] = useState<Data[]>([]);
     const [waiting, setWaiting] = useState<Data[]>([]);
     const [progress, setProgress] = useState<Data[]>([]);
-    const [finished, setFinished] = useState<Data[]>([]);
+    const [finished, setFinished] = useState<Data[][]>([[]]);
 
     const reload = () => {
         fetch("/api/")
@@ -35,9 +36,9 @@ export default function Home() {
                     const end_date = new Date(d.end_time);
                     return !(d.status === "win" || d.status === "lose" || d.status === "draw") && (start_date < now);
                 });
-                const finished = data.filter((d: any) => {
-                    const end_date = new Date(d.end_time);
-                    return (d.status === "win" || d.status === "lose" || d.status === "draw") ;
+                const finished_all = data.filter((d: any) => {
+                    const start_date = new Date(d.start_time);
+                    return d.status === "win" || d.status === "lose" || d.status === "draw" || start_date < today;
                 });
 
                 // waitingは開始時間が早い順
@@ -50,10 +51,22 @@ export default function Home() {
                     return new Date(a.start_time).getTime() - new Date(b.start_time).getTime();
                 })
 
-                // finishedは終了時間が早い順
-                finished.sort((a: any, b: any) => {
-                    return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
-                })
+                // const [finished, setFinished] = useState<Data[][]>([[]]);
+                // finishedはfinished_allから再度競技ごとに配列にまとめ、さらにその中身をidが若い順にソートする。２次元配列になる。
+                const finished = finished_all.reduce((acc: any, cur: any) => {
+                    const index = acc.findIndex((a: any) => a[0].sports === cur.sports);
+                    if (index === -1) {
+                        acc.push([cur])
+                    } else {
+                        acc[index].push(cur)
+                    }
+                    return acc;
+                }, []).map((a: any) => {
+                    return a.sort((a: any, b: any) => {
+                        return a.id - b.id;
+                    })
+                });
+
 
 
                 setWaiting(waiting);
@@ -88,9 +101,16 @@ export default function Home() {
 
             <ListWrapper title="終了した試合">
                 {finished.map((data, index) =>
-                    <ListElement data={data} key={index} finished></ListElement>
+                    <ListContainer key={index}>
+                        {data.map((d: any, i: any) => {
+                            return (
+                                <ListElement data={d} key={index} finished></ListElement>
+                            )
+                        })}
+                    </ListContainer>
                 )}
             </ListWrapper>
+
         </main>
     );
 }
